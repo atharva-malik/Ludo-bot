@@ -81,16 +81,21 @@ public class GameManager : MonoBehaviour
                         break;
                     }
                 }
-                if (!canMove){
+                canMove = false;
+                if (canMove == false){
                     canRoll = true;
+                    switchTurn();
                 }
-                else{
+                else if (canMove == true){
                     foreach (Transform t in greenCounters){
                         if (hit.collider.gameObject.transform == t){
                             if (hit.collider.gameObject.GetComponent<Counter>().canMove(currentRoll)){
                                 move(currentRoll, hit.collider.gameObject);
                                 canRoll = true;
                                 canMove = false;
+                                if (currentRoll != 5){
+                                    switchTurn();
+                                }
                             }
                         }
                     }
@@ -103,16 +108,21 @@ public class GameManager : MonoBehaviour
                         break;
                     }
                 }
-                if (!canMove){
+                canMove = false;
+                if (canMove == false){
                     canRoll = true;
+                    switchTurn();
                 }
-                else{
+                else if (canMove == true){
                     foreach (Transform t in blueCounters){
                         if (hit.collider.gameObject.transform == t){
                             if (hit.collider.gameObject.GetComponent<Counter>().canMove(currentRoll)){
                                 move(currentRoll, hit.collider.gameObject);
                                 canRoll = true;
                                 canMove = false;
+                                if (currentRoll != 5){
+                                    switchTurn();
+                                }
                             }
                         }
                     }
@@ -172,14 +182,15 @@ public class GameManager : MonoBehaviour
         if (num == 5){
             canRoll = true;
         }
-        else{
-            if (turn == 0){
-                turn++;
-            }
-            else{
-                turn--;
-            }
-        }
         return num;
+    }
+
+    void switchTurn(){
+        if (turn == 0){
+            turn++;
+        }
+        else{
+            turn--;
+        }
     }
 }
