@@ -84,6 +84,16 @@ public class GameManager : MonoBehaviour
                     }
                 }
             }
+            if (turn == 1){ // This will be the bot's turn, but bot is not yet implemented
+                foreach (Transform t in blueCounters){
+                    if (hit.collider.gameObject.transform == t){
+                        if (hit.collider.gameObject.GetComponent<Counter>().canMove(currentRoll)){
+                            move(currentRoll, hit.collider.gameObject, turn);
+                            canRoll = true;
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -99,10 +109,10 @@ public class GameManager : MonoBehaviour
             counter.currentCheckpoint = counter.currentCheckpoint += currentRoll-51;
             token.transform.position = checkpointList[counter.currentCheckpoint].position;
             return;
-        }//? THIS WILL NEED FIXING FOR BLUE
+        }
         if (counter.currentCheckpoint+currentRoll+1 > counter.homeStart && counter.isInHome != true && counter.currentCheckpoint < counter.startCheckpoint){
             counter.currentCheckpoint += currentRoll+counter.homeOffset+1;
-            counter.homeTravelled = counter.currentCheckpoint-counter.homeStart-counter.homeOffset-1;
+            counter.homeTravelled = counter.currentCheckpoint-counter.homeStart-counter.homeOffset;
             token.transform.position = checkpointList[counter.currentCheckpoint].position;
             counter.isInHome = true;
             return;
@@ -110,7 +120,7 @@ public class GameManager : MonoBehaviour
         if (counter.isInHome){
             //counter.homeTravelled < 6 && 
             if(counter.homeTravelled+currentRoll+1 <= 6){
-                if(counter.homeTravelled == 6 || counter.homeTravelled+currentRoll+1 >= 6){
+                if(counter.homeTravelled == 6 || counter.homeTravelled+currentRoll+1 == 6){
                     // token.transform.position = checkpointList[^1].position;
                     token.transform.position = new Vector2(0,0);
                     counter.isFinished = true;
@@ -135,12 +145,12 @@ public class GameManager : MonoBehaviour
         }
         int num = Random.Range(0, 6);
         dieFaces[num].SetActive(true);
-        // if (turn == 0){
-        //     turn++;
-        // }
-        // else{
-        //     turn--;
-        // }
+        if (turn == 0){
+            turn++;
+        }
+        else{
+            turn--;
+        }
         return num;
     }
 }
