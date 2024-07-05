@@ -25,9 +25,9 @@ public class GameManager : MonoBehaviour
     public Transform Checkpoints;
     private List<Transform> checkpointList;
 
-    private int turn = 0;
+    private int turn = 1;
     public bool canRoll = true;
-
+    private bool canMove = false;
     public int currentRoll = -1;
 
     // Start is called before the first frame update
@@ -72,24 +72,48 @@ public class GameManager : MonoBehaviour
                 if (hit.collider.tag == "Die"){
                     currentRoll = roll();
                 }
-                //canRoll = false;
+                canRoll = false;
             }
             if (turn == 0){ // Player's turn
-                foreach (Transform t in greenCounters){
-                    if (hit.collider.gameObject.transform == t){
-                        if (hit.collider.gameObject.GetComponent<Counter>().canMove(currentRoll)){
-                            move(currentRoll, hit.collider.gameObject, turn);
-                            canRoll = true;
+                foreach (Transform c in greenCounters){
+                    if (c.GetComponent<Counter>().canMove(currentRoll)){
+                        canMove = true;
+                        break;
+                    }
+                }
+                if (!canMove){
+                    canRoll = true;
+                }
+                else{
+                    foreach (Transform t in greenCounters){
+                        if (hit.collider.gameObject.transform == t){
+                            if (hit.collider.gameObject.GetComponent<Counter>().canMove(currentRoll)){
+                                move(currentRoll, hit.collider.gameObject);
+                                canRoll = true;
+                                canMove = false;
+                            }
                         }
                     }
                 }
             }
-            if (turn == 1){ // This will be the bot's turn, but bot is not yet implemented
-                foreach (Transform t in blueCounters){
-                    if (hit.collider.gameObject.transform == t){
-                        if (hit.collider.gameObject.GetComponent<Counter>().canMove(currentRoll)){
-                            move(currentRoll, hit.collider.gameObject, turn);
-                            canRoll = true;
+            else if (turn == 1){ // This will be the bot's turn, but bot is not yet implemented
+                foreach (Transform c in blueCounters){
+                    if (c.GetComponent<Counter>().canMove(currentRoll)){
+                        canMove = true;
+                        break;
+                    }
+                }
+                if (!canMove){
+                    canRoll = true;
+                }
+                else{
+                    foreach (Transform t in blueCounters){
+                        if (hit.collider.gameObject.transform == t){
+                            if (hit.collider.gameObject.GetComponent<Counter>().canMove(currentRoll)){
+                                move(currentRoll, hit.collider.gameObject);
+                                canRoll = true;
+                                canMove = false;
+                            }
                         }
                     }
                 }
@@ -97,7 +121,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void move(int currentRoll, GameObject token, int turn){
+    void move(int currentRoll, GameObject token){
         Counter counter = token.GetComponent<Counter>();
         if (currentRoll == 5 && counter.isOut == false){
             token.transform.position = checkpointList[counter.startCheckpoint].position;
@@ -145,11 +169,16 @@ public class GameManager : MonoBehaviour
         }
         int num = Random.Range(0, 6);
         dieFaces[num].SetActive(true);
-        if (turn == 0){
-            turn++;
+        if (num == 5){
+            canRoll = true;
         }
         else{
-            turn--;
+            if (turn == 0){
+                turn++;
+            }
+            else{
+                turn--;
+            }
         }
         return num;
     }
