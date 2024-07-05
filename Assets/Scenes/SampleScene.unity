@@ -6604,7 +6604,7 @@ MonoBehaviour:
   homeTravelled: 0
   homeStart: 36
   homeOffset: 24
-  currentCheckpoint: 30
+  currentCheckpoint: 0
   isFinished: 0
   startCheckpoint: 39
 --- !u!1 &1701961152
@@ -6928,7 +6928,7 @@ MonoBehaviour:
   isOut: 0
   isInHome: 0
   homeTravelled: 0
-  homeStart: 36
+  homeStart: 37
   homeOffset: 24
   currentCheckpoint: 0
   isFinished: 0
