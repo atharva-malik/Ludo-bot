@@ -90,11 +90,17 @@ public class GameManager : MonoBehaviour
     void move(int currentRoll, GameObject token, int turn){
         Counter counter = token.GetComponent<Counter>();
         if (currentRoll == 5 && counter.isOut == false){
-            token.transform.position = counter.startCheckpoint.position;
+            token.transform.position = checkpointList[counter.startCheckpoint].position;
+            counter.currentCheckpoint = counter.startCheckpoint;
             counter.isOut = true;
             return;
         }
-        if (counter.currentCheckpoint+currentRoll+1 > counter.homeStart && counter.isInHome != true){
+        if (counter.currentCheckpoint+currentRoll+1 > 51 && counter.isInHome == false){
+            counter.currentCheckpoint = counter.currentCheckpoint += currentRoll-51;
+            token.transform.position = checkpointList[counter.currentCheckpoint].position;
+            return;
+        }
+        if (counter.currentCheckpoint+currentRoll+1 > counter.homeStart && counter.isInHome != true && counter.currentCheckpoint < counter.startCheckpoint){
             counter.currentCheckpoint += currentRoll+counter.homeOffset+1;
             counter.homeTravelled = counter.currentCheckpoint-counter.homeStart-counter.homeOffset-1;
             token.transform.position = checkpointList[counter.currentCheckpoint].position;
@@ -102,8 +108,12 @@ public class GameManager : MonoBehaviour
             return;
         }
         if (counter.isInHome){
-            if(counter.homeTravelled < 6 && counter.homeTravelled+currentRoll+1 <= 6){
-                if(counter.homeTravelled == 6 || counter.homeTravelled+currentRoll+1 <= 6){
+            Debug.Log(counter.homeTravelled);
+            Debug.Log(counter.currentCheckpoint);
+            Debug.Log(currentRoll);
+            //counter.homeTravelled < 6 && 
+            if(counter.homeTravelled+currentRoll+1 < 6){
+                if(counter.homeTravelled == 6 || counter.homeTravelled+currentRoll+1 > 6){
                     token.transform.position = checkpointList[^1].position;
                     counter.isFinished = true;
                     return;
@@ -119,21 +129,6 @@ public class GameManager : MonoBehaviour
         }
         counter.currentCheckpoint += currentRoll+1;
         token.transform.position = checkpointList[counter.currentCheckpoint].position;
-    }
-
-    int startingPositionFromTurn(int turn){
-        if (turn == 1){
-            foreach(Transform t in checkpointList){
-                if (t.gameObject.GetComponent<Checkpoints>().yellowStartPoint){
-                    for (int i = 0; i < checkpointList.Count; i++){
-                        if (checkpointList[i] == t){
-                            return i;
-                        }
-                    }
-                }
-            }
-        }
-        return 0;
     }
 
     int roll(){

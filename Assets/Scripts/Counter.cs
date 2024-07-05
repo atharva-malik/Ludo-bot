@@ -11,7 +11,7 @@ public class Counter : MonoBehaviour
     public int homeOffset = 0;
     public int currentCheckpoint = 0;
     public bool isFinished = false;
-    public Transform startCheckpoint;
+    public int startCheckpoint;
 
 
     // Start is called before the first frame update

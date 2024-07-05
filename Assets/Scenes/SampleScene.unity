@@ -791,7 +791,7 @@ MonoBehaviour:
   homeOffset: 24
   currentCheckpoint: 0
   isFinished: 0
-  startCheckpoint: {fileID: 1692487937}
+  startCheckpoint: 39
 --- !u!1 &205326641
 GameObject:
   m_ObjectHideFlags: 0
@@ -1161,8 +1161,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8254182074263413486, guid: 05703c07fc7b38f42ae8e54b4c9e3fed, type: 3}
       propertyPath: startCheckpoint
-      value: 
-      objectReference: {fileID: 33564764}
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1467,8 +1467,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8254182074263413486, guid: 05703c07fc7b38f42ae8e54b4c9e3fed, type: 3}
       propertyPath: startCheckpoint
-      value: 
-      objectReference: {fileID: 33564764}
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3410,8 +3410,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8254182074263413486, guid: 05703c07fc7b38f42ae8e54b4c9e3fed, type: 3}
       propertyPath: startCheckpoint
-      value: 
-      objectReference: {fileID: 33564764}
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6342,8 +6342,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8254182074263413486, guid: 05703c07fc7b38f42ae8e54b4c9e3fed, type: 3}
       propertyPath: startCheckpoint
-      value: 
-      objectReference: {fileID: 33564764}
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6604,9 +6604,9 @@ MonoBehaviour:
   homeTravelled: 0
   homeStart: 36
   homeOffset: 24
-  currentCheckpoint: 0
+  currentCheckpoint: 30
   isFinished: 0
-  startCheckpoint: {fileID: 1692487937}
+  startCheckpoint: 39
 --- !u!1 &1701961152
 GameObject:
   m_ObjectHideFlags: 0
@@ -6932,7 +6932,7 @@ MonoBehaviour:
   homeOffset: 24
   currentCheckpoint: 0
   isFinished: 0
-  startCheckpoint: {fileID: 1692487937}
+  startCheckpoint: 39
 --- !u!1 &1762380521
 GameObject:
   m_ObjectHideFlags: 0
@@ -7144,7 +7144,7 @@ MonoBehaviour:
   homeOffset: 24
   currentCheckpoint: 0
   isFinished: 0
-  startCheckpoint: {fileID: 1692487937}
+  startCheckpoint: 39
 --- !u!1 &1825886369
 GameObject:
   m_ObjectHideFlags: 0
