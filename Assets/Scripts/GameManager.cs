@@ -77,12 +77,12 @@ public class GameManager : MonoBehaviour
                     roll();
                     currentRoll = dieRolls[0];
                     if(lastRoll != 5){
-                        // switchTurn();
+                        switchTurn();
                         lastRoll = currentRoll;
                     }else{
                         lastRoll = currentRoll;
                     }
-                    // canRoll = false;
+                    canRoll = false;
                     changeRoll();
                 }
             }
@@ -102,7 +102,6 @@ public class GameManager : MonoBehaviour
                 break;
             }
         }
-        // canMove = false;
         if (canMove == false){
             canRoll = true;
             // switchTurn();
@@ -145,7 +144,6 @@ public class GameManager : MonoBehaviour
             token.transform.position = checkpointList[counter.currentCheckpoint].position;
             counter.isInHome = true;
             if(counter.homeTravelled >= 6){
-                // token.transform.position = checkpointList[^1].position;
                 token.transform.position = new Vector2(0,0);
                 counter.isFinished = true;
                 return;
@@ -153,10 +151,8 @@ public class GameManager : MonoBehaviour
             return;
         }
         if (counter.isInHome){
-            //counter.homeTravelled < 6 && 
             if(counter.homeTravelled+cr+1 <= 6){
                 if(counter.homeTravelled >= 6 || counter.homeTravelled+cr+1 >= 6){
-                    // token.transform.position = checkpointList[^1].position;
                     token.transform.position = new Vector2(0,0);
                     counter.isFinished = true;
                     return;
@@ -175,18 +171,6 @@ public class GameManager : MonoBehaviour
     }
 
     void roll(){
-        // if(currentRoll != 5){
-        //     switchTurn();
-        // }
-        // foreach (GameObject o in dieFaces){
-        //     o.SetActive(false);
-        // }
-        // int num = Random.Range(0, 6);
-        // dieFaces[num].SetActive(true);
-        // if (num == 5){
-        //     canRoll = true;
-        // }
-        // return num;
         foreach (GameObject o in dieFaces){
             o.SetActive(false);
         }
