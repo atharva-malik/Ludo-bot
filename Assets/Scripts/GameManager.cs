@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
     public Transform Checkpoints;
     private List<Transform> checkpointList;
 
-    private int turn = 1;
+    private int turn = -1;
     public bool canRoll = true;
     private bool canMove = false;
     public int currentRoll = -1;
@@ -71,8 +71,8 @@ public class GameManager : MonoBehaviour
             if (hit.collider != null && canRoll) {
                 if (hit.collider.tag == "Die"){
                     currentRoll = roll();
+                    canRoll = false;
                 }
-                canRoll = false;
             }
             if (turn == 0){ // Player's turn
                 foreach (Transform c in greenCounters){
@@ -81,10 +81,10 @@ public class GameManager : MonoBehaviour
                         break;
                     }
                 }
-                canMove = false;
+                // canMove = false;
                 if (canMove == false){
                     canRoll = true;
-                    switchTurn();
+                    // switchTurn();
                 }
                 else if (canMove == true){
                     foreach (Transform t in greenCounters){
@@ -93,9 +93,9 @@ public class GameManager : MonoBehaviour
                                 move(currentRoll, hit.collider.gameObject);
                                 canRoll = true;
                                 canMove = false;
-                                if (currentRoll != 5){
-                                    switchTurn();
-                                }
+                                // if (currentRoll != 5){
+                                //     switchTurn();
+                                // }
                             }
                         }
                     }
@@ -108,10 +108,10 @@ public class GameManager : MonoBehaviour
                         break;
                     }
                 }
-                canMove = false;
+                // canMove = false;
                 if (canMove == false){
                     canRoll = true;
-                    switchTurn();
+                    // switchTurn();
                 }
                 else if (canMove == true){
                     foreach (Transform t in blueCounters){
@@ -120,9 +120,9 @@ public class GameManager : MonoBehaviour
                                 move(currentRoll, hit.collider.gameObject);
                                 canRoll = true;
                                 canMove = false;
-                                if (currentRoll != 5){
-                                    switchTurn();
-                                }
+                                // if (currentRoll != 5){
+                                //     switchTurn();
+                                // }
                             }
                         }
                     }
@@ -174,6 +174,9 @@ public class GameManager : MonoBehaviour
     }
 
     int roll(){
+        if(currentRoll != 5){
+            switchTurn();
+        }
         foreach (GameObject o in dieFaces){
             o.SetActive(false);
         }
@@ -186,7 +189,7 @@ public class GameManager : MonoBehaviour
     }
 
     void switchTurn(){
-        if (turn == 0){
+        if (turn <= 0){
             turn++;
         }
         else{
