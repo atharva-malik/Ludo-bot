@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
     private List<Transform> checkpointList;
 
     private int turn = -1;
+    private int[] dieRolls;
     public bool canRoll = true;
     private bool canMove = false;
     public int currentRoll = -1;
@@ -58,6 +59,7 @@ public class GameManager : MonoBehaviour
             o.SetActive(false);
         }
         dieFaces[0].SetActive(true);
+        roll();
     }
 
     // Update is called once per frame
@@ -90,9 +92,9 @@ public class GameManager : MonoBehaviour
                     foreach (Transform t in greenCounters){
                         if (hit.collider.gameObject.transform == t){
                             if (hit.collider.gameObject.GetComponent<Counter>().canMove(currentRoll)){
+                                canMove = false;
                                 move(currentRoll, hit.collider.gameObject);
                                 canRoll = true;
-                                canMove = false;
                                 // if (currentRoll != 5){
                                 //     switchTurn();
                                 // }
@@ -117,9 +119,9 @@ public class GameManager : MonoBehaviour
                     foreach (Transform t in blueCounters){
                         if (hit.collider.gameObject.transform == t){
                             if (hit.collider.gameObject.GetComponent<Counter>().canMove(currentRoll)){
+                                canMove = false;
                                 move(currentRoll, hit.collider.gameObject);
                                 canRoll = true;
-                                canMove = false;
                                 // if (currentRoll != 5){
                                 //     switchTurn();
                                 // }
@@ -131,21 +133,22 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void move(int currentRoll, GameObject token){
+    void move(int cr, GameObject token){
+        currentRoll = -1;
         Counter counter = token.GetComponent<Counter>();
-        if (currentRoll == 5 && counter.isOut == false){
+        if (cr == 5 && counter.isOut == false){
             token.transform.position = checkpointList[counter.startCheckpoint].position;
             counter.currentCheckpoint = counter.startCheckpoint;
             counter.isOut = true;
             return;
         }
-        if (counter.currentCheckpoint+currentRoll+1 > 51 && counter.isInHome == false){
-            counter.currentCheckpoint = counter.currentCheckpoint += currentRoll-51;
+        if (counter.currentCheckpoint+cr+1 > 51 && counter.isInHome == false){
+            counter.currentCheckpoint = counter.currentCheckpoint += cr-51;
             token.transform.position = checkpointList[counter.currentCheckpoint].position;
             return;
         }
-        if (counter.currentCheckpoint+currentRoll+1 > counter.homeStart && counter.isInHome != true && counter.currentCheckpoint < counter.startCheckpoint){
-            counter.currentCheckpoint += currentRoll+counter.homeOffset+1;
+        if (counter.currentCheckpoint+cr+1 > counter.homeStart && counter.isInHome != true && counter.currentCheckpoint < counter.startCheckpoint){
+            counter.currentCheckpoint += cr+counter.homeOffset+1;
             counter.homeTravelled = counter.currentCheckpoint-counter.homeStart-counter.homeOffset;
             token.transform.position = checkpointList[counter.currentCheckpoint].position;
             counter.isInHome = true;
@@ -153,15 +156,15 @@ public class GameManager : MonoBehaviour
         }
         if (counter.isInHome){
             //counter.homeTravelled < 6 && 
-            if(counter.homeTravelled+currentRoll+1 <= 6){
-                if(counter.homeTravelled == 6 || counter.homeTravelled+currentRoll+1 == 6){
+            if(counter.homeTravelled+cr+1 <= 6){
+                if(counter.homeTravelled == 6 || counter.homeTravelled+cr+1 == 6){
                     // token.transform.position = checkpointList[^1].position;
                     token.transform.position = new Vector2(0,0);
                     counter.isFinished = true;
                     return;
                 }
-                counter.currentCheckpoint += currentRoll+1;
-                counter.homeTravelled += currentRoll+1;
+                counter.currentCheckpoint += cr+1;
+                counter.homeTravelled += cr+1;
                 token.transform.position = checkpointList[counter.currentCheckpoint].position;
                 return;
             }
@@ -169,23 +172,24 @@ public class GameManager : MonoBehaviour
                 return;
             }
         }
-        counter.currentCheckpoint += currentRoll+1;
+        counter.currentCheckpoint += cr+1;
         token.transform.position = checkpointList[counter.currentCheckpoint].position;
     }
 
     int roll(){
-        if(currentRoll != 5){
-            switchTurn();
-        }
-        foreach (GameObject o in dieFaces){
-            o.SetActive(false);
-        }
-        int num = Random.Range(0, 6);
-        dieFaces[num].SetActive(true);
-        if (num == 5){
-            canRoll = true;
-        }
-        return num;
+        // if(currentRoll != 5){
+        //     switchTurn();
+        // }
+        // foreach (GameObject o in dieFaces){
+        //     o.SetActive(false);
+        // }
+        // int num = Random.Range(0, 6);
+        // dieFaces[num].SetActive(true);
+        // if (num == 5){
+        //     canRoll = true;
+        // }
+        // return num;
+        if 
     }
 
     void switchTurn(){
