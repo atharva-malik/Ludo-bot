@@ -24,14 +24,14 @@ public class GameManager : MonoBehaviour
 
     [Space(10)]
     public Transform Checkpoints;
-    private List<Transform> checkpointList;
+    public List<Transform> checkpointList;
 
     private Bot bot;
     private int turn = 0;
     public int[] dieRolls = new int[10];
     public bool canRoll = true;
     private bool canMove = false;
-    private int currentRoll = -1;
+    public int currentRoll = -1;
     private int lastRoll = -1;
     private string front = "";
 
@@ -105,7 +105,6 @@ public class GameManager : MonoBehaviour
             foreach (Transform c in blueCounters){
                 if (c.GetComponent<Counter>().canMove(currentRoll)){
                     canMove = true;
-                    Debug.Log("Can Move");
                     break;
                 }
             }
@@ -117,9 +116,8 @@ public class GameManager : MonoBehaviour
                 moveToFront(blueCounters, greenCounters);
             }
             int moveNum = bot.makeMove(currentRoll);
-            // Debug.Log(currentRoll);
-            // Debug.Log(moveNum);
             if (moveNum != -1){
+                Debug.Log(bot.evaluation());
                 move(currentRoll, blueCounters[moveNum].gameObject, greenCounters);
                 canRoll = true;
                 canMove = false;
@@ -272,6 +270,7 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
+        canRoll = true;
     }
 
     int getIndex(Transform target, Transform[] objects){
