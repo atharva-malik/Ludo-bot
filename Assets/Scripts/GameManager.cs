@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Jobs;
@@ -68,7 +69,9 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(canMove);
+        if (checkWin() == true){
+            Debug.Log("Game Over");
+        }
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -121,33 +124,26 @@ public class GameManager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Keypad1) && counters[0].GetComponent<Counter>().canMove(currentRoll))
             {
                 move(currentRoll, counters[0].gameObject, otherCounters);
-                canMove = false;
-                canRoll = true;
             }
             else if (Input.GetKeyDown(KeyCode.Keypad2) && counters[1].GetComponent<Counter>().canMove(currentRoll))
             {
                 move(currentRoll, counters[1].gameObject, otherCounters);
-                canMove = false;
-                canRoll = true;
             }
             else if (Input.GetKeyDown(KeyCode.Keypad3) && counters[2].GetComponent<Counter>().canMove(currentRoll))
             {
                 move(currentRoll, counters[2].gameObject, otherCounters);
-                canMove = false;
-                canRoll = true;
             }
             else if (Input.GetKeyDown(KeyCode.Keypad4) && counters[3].GetComponent<Counter>().canMove(currentRoll))
             {
                 move(currentRoll, counters[3].gameObject, otherCounters);
-                canMove = false;
-                canRoll = true;
             }
         }
+        canRoll = true;
         canMove = false;
     }
 
     void move(int cr, GameObject token, Transform[] otherToken){
-        checkCaptures(token.transform, otherToken);
+        doCaptures(token.transform, otherToken, cr);
         currentRoll = -1;
         // changeRoll();
         Counter counter = token.GetComponent<Counter>();
@@ -158,7 +154,8 @@ public class GameManager : MonoBehaviour
             return;
         }
         if (counter.currentCheckpoint+cr+1 > 51 && counter.isInHome == false){
-            counter.currentCheckpoint = counter.currentCheckpoint += cr-51;
+            // counter.currentCheckpoint = counter.currentCheckpoint += cr-51;
+            counter.currentCheckpoint += cr-51;
             token.transform.position = checkpointList[counter.currentCheckpoint].position;
             return;
         }
@@ -231,16 +228,54 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void checkCaptures(Transform myCounter, Transform[] otherCounters){
+    void doCaptures(Transform myCounter, Transform[] otherCounters, int cRoll){
+        Counter counter = myCounter.GetComponent<Counter>();
+        int cp = counter.currentCheckpoint;
+        if (counter.currentCheckpoint+cRoll+1 > 51 && counter.isInHome == false){
+            cp += cRoll-51;
+        }else{
+            cp += cRoll+1;
+        }
         foreach (Transform c in otherCounters){
-            if (c.GetComponent<Counter>().currentCheckpoint == myCounter.GetComponent<Counter>().currentCheckpoint && c.GetComponent<Counter>().isOut == true){
-                Debug.Log("Capture!");
-                // c.GetComponent<Counter>().isFinished = true;
+            if (c.GetComponent<Counter>().currentCheckpoint == cp && c.GetComponent<Counter>().isOut == true && checkpointList[cp].GetComponent<Checkpoints>().isSafe == false){
+                c.GetComponent<Counter>().isOut = false;
+                if (otherCounters == blueCounters){
+                    int i = getIndex(c, blueCounters);
+                    otherCounters[i].transform.position = blueInitialTransforms[i].position;
+                }else if (otherCounters == greenCounters){
+                    int i = getIndex(c, greenCounters);
+                    otherCounters[i].transform.position = greenInitialTransforms[i].position;
+                }
             }
         }
     }
 
-    void moveToFront(Transform[] counters, Transform[] otherCounters, int cRoll){
+    int getIndex(Transform target, Transform[] objects){
+        int index = -1;
+        for (int i = 0; i < objects.Length; i++){
+            if (objects[i] == target){
+                index = i;
+                break;
+            }
+        }
+        return index;
+    }
+
+    bool checkWin(){
+        foreach (Transform c in blueCounters){
+            if (c.GetComponent<Counter>().isFinished == false){
+                return false;
+            }
+        }
+        foreach (Transform c in greenCounters){
+            if (c.GetComponent<Counter>().isFinished == false){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    void moveToFront(Transform[] counters, Transform[] otherCounters){
         foreach (Transform c in counters){
             c.transform.position += new Vector3(0,0,1);
         }
