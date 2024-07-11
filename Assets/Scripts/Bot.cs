@@ -37,20 +37,22 @@ public class Bot : MonoBehaviour
     }
 
     int[] getRoll(int[] rolls, int lr){
-        int len = 1;
-        for (int i = 0; i < 6; i++){
+        int[] output = new int[1];
+        int len;
+        if (lr == 5){
+            len = 1;
+        }else{
+            output[0] = lr;
+            return output;
+        }
+        for (int i = 0; i < 3; i++){
+            len ++;
             if (rolls[i] != 5){
-                len += i;
                 break;
             }
         }
-        // foreach (int roll in rolls){
-        //     if (roll != 5){
-        //         break;
-        //     }
-        // }
-        int[] output = new int[len];
-        rolls[0] = 5;
+        output = new int[len];
+        output[0] = 5;
         for (int i = 1; i < len; i++){
             output[i] = rolls[i-1];
             if (rolls[i-1] != 5){
@@ -169,7 +171,7 @@ public class Bot : MonoBehaviour
     }
 
     public int makeMove(Transform[] bCounters, Transform[] pCounters, int depth){
-        Debug.LogWarning("Starting Minimax");
+        // Debug.LogWarning("Starting Minimax");
         float alpha = -2147483648;
         float beta = 2147483647;
         Transform[] bCountersEdited = new Transform[bCounters.Length];
@@ -182,33 +184,36 @@ public class Bot : MonoBehaviour
                 flag = true;
             }
         }
-        if (flag == false)
+        if (flag == false){
             return -1;
+        }
+        Debug.LogWarning("Starting minimax");
         float maxEval = -2147483648;
         int best_move = -1;
         int[] rolls = getRoll(gm.dieRolls, gm.lastRoll);
-        foreach (int i in rolls){
-            // Debug.LogError(i);
+        for (int i = 0; i<rolls.Length; i++){
+            Debug.Log("Roll: " + i.ToString() + " " + rolls[i].ToString());
         }
         for (int i = 0; i < bCountersEdited.Length; i++){
             Debug.LogWarning("Cycling through bCounters " + i.ToString());
             for (int r = 0; r < 3; r++){
                 Debug.LogWarning("Cycling through rolls " + r.ToString());
                 if (bCountersEdited[i].GetComponent<Counter>().canMove(r)){
-                    Debug.LogWarning("Finding what can move" + rolls[r].ToString());
+                    // Debug.LogWarning("Finding what can move" + rolls[r].ToString());
                     move(rolls[r], bCountersEdited[i].gameObject, pCountersEdited);
                     float eval = minimax(bCountersEdited, pCountersEdited, depth - 1, alpha, beta, false);
-                    maxEval = Mathf.Max(maxEval, eval);
+                    Debug.Log("Eval for " + i.ToString() + eval.ToString());
                     if (eval > maxEval){
-                        Debug.LogWarning("Move FOUND!" + i.ToString());
+                        // Debug.LogWarning("Move FOUND!" + i.ToString());
                         maxEval = eval;
                         best_move = i;
                     }
                 }
             }
-            System.Array.Copy(bCounters, bCountersEdited, bCounters.Length);
-            System.Array.Copy(pCounters, pCountersEdited, pCounters.Length);
+            // System.Array.Copy(bCounters, bCountersEdited, bCounters.Length);
+            // System.Array.Copy(pCounters, pCountersEdited, pCounters.Length);
         }
+        // Debug.Log(best_move);
         return best_move;
         /*
         def find_best_move():

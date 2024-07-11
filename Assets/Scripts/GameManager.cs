@@ -116,7 +116,6 @@ public class GameManager : MonoBehaviour
                 moveToFront(blueCounters, greenCounters);
             }
             int moveNum = bot.makeMove(blueCounters, greenCounters, 2);
-            Debug.Log(moveNum);
             if (moveNum != -1){
                 // Debug.Log(bot.evaluation());
                 move(currentRoll, blueCounters[moveNum].gameObject, greenCounters);
