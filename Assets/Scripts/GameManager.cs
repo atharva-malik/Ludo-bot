@@ -101,20 +101,36 @@ public class GameManager : MonoBehaviour
             playerTurn(greenCounters, blueCounters);
         }
         else if (turn == 1){ // This will be the bot's turn, but bot is not yet implemented
+            canMove = false;
+            foreach (Transform c in blueCounters){
+                if (c.GetComponent<Counter>().canMove(currentRoll)){
+                    canMove = true;
+                    Debug.Log("Can Move");
+                    break;
+                }
+            }
+            if (canMove == false){
+                canRoll = true;
+            }
             if (front != "blue"){
                 front = "blue";
                 moveToFront(blueCounters, greenCounters);
             }
-            // move(currentRoll, blueCounters[bot.makeMove()].gameObject, greenCounters);
-            playerTurn(blueCounters, greenCounters);
+            int moveNum = bot.makeMove(currentRoll);
+            // Debug.Log(currentRoll);
+            // Debug.Log(moveNum);
+            if (moveNum != -1){
+                move(currentRoll, blueCounters[moveNum].gameObject, greenCounters);
+                canRoll = true;
+                canMove = false;
+            }
+            // playerTurn(blueCounters, greenCounters);
         }
     }
 
     void playerTurn(Transform[] counters, Transform[] otherCounters){
         foreach (Transform c in counters){
             if (c.GetComponent<Counter>().canMove(currentRoll)){
-                // Debug.Log("Counter can move!");
-                // Debug.Log(c.transform.name);
                 canMove = true;
                 break;
             }
@@ -126,22 +142,28 @@ public class GameManager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Keypad1) && counters[0].GetComponent<Counter>().canMove(currentRoll))
             {
                 move(currentRoll, counters[0].gameObject, otherCounters);
+                canRoll = true;
+                canMove = false;
             }
             else if (Input.GetKeyDown(KeyCode.Keypad2) && counters[1].GetComponent<Counter>().canMove(currentRoll))
             {
                 move(currentRoll, counters[1].gameObject, otherCounters);
+                canRoll = true;
+                canMove = false;
             }
             else if (Input.GetKeyDown(KeyCode.Keypad3) && counters[2].GetComponent<Counter>().canMove(currentRoll))
             {
                 move(currentRoll, counters[2].gameObject, otherCounters);
+                canRoll = true;
+                canMove = false;
             }
             else if (Input.GetKeyDown(KeyCode.Keypad4) && counters[3].GetComponent<Counter>().canMove(currentRoll))
             {
                 move(currentRoll, counters[3].gameObject, otherCounters);
+                canRoll = true;
+                canMove = false;
             }
         }
-        canRoll = true;
-        canMove = false;
     }
 
     void move(int cr, GameObject token, Transform[] otherToken){

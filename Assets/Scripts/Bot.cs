@@ -31,11 +31,13 @@ public class Bot : MonoBehaviour
         
     }
 
-    public int makeMove(){
-        int move = Random.Range(0,4);
-        while (gm.greenCounters[move].GetComponent<Counter>().canMove(move) == false)
-            move = Random.Range(0, 4);
-        return move;
+    public int makeMove(int cr){
+        for (int i = 0; i < 4; i++){
+            if (gm.blueCounters[i].GetComponent<Counter>().canMove(cr) == true){
+                return i;
+            }
+        }
+        return -1;
     }
 
     float evaluation(){
