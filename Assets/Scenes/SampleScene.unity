@@ -216,8 +216,10 @@ MonoBehaviour:
   - {fileID: 1130103672}
   - {fileID: 1161867742}
   Checkpoints: {fileID: 617355376}
+  checkpointList: []
   dieRolls: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
   canRoll: 1
+  currentRoll: -1
 --- !u!114 &11835597
 MonoBehaviour:
   m_ObjectHideFlags: 0

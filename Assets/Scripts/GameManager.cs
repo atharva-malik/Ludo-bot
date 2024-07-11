@@ -115,12 +115,21 @@ public class GameManager : MonoBehaviour
                 front = "blue";
                 moveToFront(blueCounters, greenCounters);
             }
-            int moveNum = bot.makeMove(currentRoll);
+            int moveNum = bot.makeMove(currentRoll, blueCounters, greenCounters, 1);
+            Debug.Log(moveNum);
             if (moveNum != -1){
-                Debug.Log(bot.evaluation());
+                // Debug.Log(bot.evaluation());
                 move(currentRoll, blueCounters[moveNum].gameObject, greenCounters);
-                canRoll = true;
-                canMove = false;
+                roll();
+                currentRoll = dieRolls[0];
+                if(lastRoll != 5){
+                    switchTurn();
+                    lastRoll = currentRoll;
+                }else{
+                    lastRoll = currentRoll;
+                }
+                canRoll = false;
+                changeRoll();
             }
             // playerTurn(blueCounters, greenCounters);
         }

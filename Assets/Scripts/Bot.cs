@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -36,40 +37,58 @@ public class Bot : MonoBehaviour
     }
 
     int[] getRoll(int[] rolls){
-        int[] output = new int[3];
+        int len = 0;
         for (int i = 0; i < 3; i++){
+            Debug.LogError("Roll: " + rolls[i].ToString());
+            len++;
             if (rolls[i] != 5){
-                output[i] = rolls[i];
                 break;
             }
-            else{
+        }
+        // foreach (int roll in rolls){
+        //     if (roll != 5){
+        //         break;
+        //     }
+        // }
+        int[] output = new int[len];
+        for (int i = 0; i < 3; i++){
                 output[i] = rolls[i];
+            if (rolls[i] != 5){
+                break;
             }
         }
         return output;
     }
 
     // Format: position_bot, position_player, depth, alpha, beta, isMaximizing
-    float minimax(Transform[] bCountersInitial, int depth, int alpha, int beta, bool isMaximizing){
-        Transform[] bCountersEdited = new Transform[gm.blueCounters.Length];
-        Transform[] pCountersEdited = new Transform[gm.blueCounters.Length];
-        System.Array.Copy(gm.blueCounters, bCountersInitial, gm.blueCounters.Length);
-        System.Array.Copy(gm.blueCounters, bCountersEdited, gm.blueCounters.Length);
-        System.Array.Copy(gm.greenCounters, pCountersInitial, gm.greenCounters.Length);
-        System.Array.Copy(gm.greenCounters, pCountersEdited, gm.greenCounters.Length);
-        if (depth == 0){
-            return evaluation();
+    float minimax(Transform[] bCounters, Transform[] pCounters, int depth, float alpha, float beta, bool isMaximizing){
+        Debug.LogWarning("Minimax called with depth " + depth.ToString());
+        if (depth == 0 || checkWin(bCounters, pCounters)){
+            return evaluation(bCounters, pCounters);
         }
+        // Transform[] bCountersInitial = new Transform[bCounters.Length];
+        Transform[] bCountersEdited = new Transform[bCounters.Length];
+        // Transform[] pCountersInitial = new Transform[pCounters.Length];
+        Transform[] pCountersEdited = new Transform[pCounters.Length];
+        // System.Array.Copy(bCounters, bCountersInitial, bCounters.Length);
+        System.Array.Copy(bCounters, bCountersEdited, bCounters.Length);
+        // System.Array.Copy(pCounters, pCountersInitial, pCounters.Length);
+        System.Array.Copy(pCounters, pCountersEdited, pCounters.Length);
         if (isMaximizing){
-            int maxEval = -2147483648;
+            float maxEval = -2147483648;
             int[] rolls = getRoll(gm.dieRolls);
-            for (int i = 0; i < bCountersInitial.Length; i++){
+            for (int i = 0; i < bCountersEdited.Length; i++){
                 for (int r = 0; r < 3; r++){
                     if (bCountersEdited[i].GetComponent<Counter>().canMove(r)){
                         move(rolls[r], bCountersEdited[i].gameObject, pCountersEdited);
-                        float eval = minimax(depth - 1, alpha, beta, false);
+                        float eval = minimax(bCountersEdited, pCountersEdited, depth - 1, alpha, beta, false);
+                        maxEval = Mathf.Max(maxEval, eval);
+                        alpha = Mathf.Max(alpha, eval);
+                        if (beta <= alpha){
+                            break;
+                        }
                     }
-                } 
+                }
             }
             /*
             for each child of position:
@@ -82,7 +101,21 @@ public class Bot : MonoBehaviour
             */
             return maxEval;
         }else{
-            int minEval = 2147483647;
+            float minEval = 2147483647;
+            int[] rolls = getRoll(gm.dieRolls);
+            for (int i = 0; i < bCountersEdited.Length; i++){
+                for (int r = 0; r < 3; r++){
+                    if (bCountersEdited[i].GetComponent<Counter>().canMove(r)){
+                        move(rolls[r], bCountersEdited[i].gameObject, pCountersEdited);
+                        float eval = minimax(bCountersEdited, pCountersEdited, depth - 1, alpha, beta, true);
+                        minEval = Mathf.Min(minEval, eval);
+                        alpha = Mathf.Min(alpha, eval);
+                        if (beta <= alpha){
+                            break;
+                        }
+                    }
+                }
+            }
             /*
             for each child of position:
                 eval = minimax(depth-1, alpha, beta, true)
@@ -96,14 +129,17 @@ public class Bot : MonoBehaviour
         }
     }
 
-    public float evaluation(){
-        Transform[] botCounters = new Transform[4];
-        Transform[] pCounters = new Transform[4];
-        System.Array.Copy(gm.blueCounters, botCounters, gm.blueCounters.Length);
-        System.Array.Copy(gm.greenCounters, pCounters, gm.greenCounters.Length);
+    public float evaluation(Transform[] bCounters, Transform[] pCounters){
+        if (whoWon(bCounters, pCounters) != 0){
+            if (whoWon(bCounters, pCounters) == 1){
+                return 2147483647;
+            }else{
+                return -2147483648;
+            }
+        }
         // The bot side
         int beval = 0;
-        foreach (Transform c in botCounters){
+        foreach (Transform c in bCounters){
             if (c.GetComponent<Counter>().isOut == true && c.GetComponent<Counter>().isInHome == false){
                 beval += 7;
             }
@@ -132,13 +168,62 @@ public class Bot : MonoBehaviour
         return beval - peval;
     }
 
-    public int makeMove(int cr){
+    public int makeMove(int cr, Transform[] bCounters, Transform[] pCounters, int depth){
+        Debug.LogWarning("Starting Minimax");
+        float alpha = -2147483648;
+        float beta = 2147483647;
+        Transform[] bCountersEdited = new Transform[bCounters.Length];
+        Transform[] pCountersEdited = new Transform[pCounters.Length];
+        System.Array.Copy(bCounters, bCountersEdited, bCounters.Length);
+        System.Array.Copy(pCounters, pCountersEdited, pCounters.Length);
+        bool flag = false;
         for (int i = 0; i < 4; i++){
             if (gm.blueCounters[i].GetComponent<Counter>().canMove(cr) == true){
-                return i;
+                flag = true;
             }
         }
-        return -1;
+        if (flag == false)
+            return -1;
+        float maxEval = -2147483648;
+        int best_move = -1;
+        int[] rolls = getRoll(gm.dieRolls);
+        foreach (int i in rolls){
+            Debug.LogError(i);
+        }
+        for (int i = 0; i < bCountersEdited.Length; i++){
+            Debug.LogWarning("Cycling through bCounters " + i.ToString());
+            for (int r = 0; r < 3; r++){
+                Debug.LogWarning("Cycling through rolls " + r.ToString());
+                if (bCountersEdited[i].GetComponent<Counter>().canMove(r)){
+                    Debug.LogWarning("Finding what can move" + rolls[r].ToString());
+                    move(rolls[r], bCountersEdited[i].gameObject, pCountersEdited);
+                    float eval = minimax(bCountersEdited, pCountersEdited, depth - 1, alpha, beta, false);
+                    maxEval = Mathf.Max(maxEval, eval);
+                    if (eval > maxEval){
+                        Debug.LogWarning("Move FOUND!" + i.ToString());
+                        maxEval = eval;
+                        best_move = i;
+                    }
+                }
+            }
+            System.Array.Copy(bCounters, bCountersEdited, bCounters.Length);
+            System.Array.Copy(pCounters, pCountersEdited, pCounters.Length);
+        }
+        return best_move;
+        /*
+        def find_best_move():
+            best_eval = float('-inf')
+            best_move = -1
+            for i in range(9):
+                if board[i] == ' ':
+                    make_move(i, 'O')
+                    evaluation = minimax(0, False)
+                    undo_move(i)
+                    if evaluation > best_eval:
+                        best_eval = evaluation
+                        best_move = i
+            return best_move
+        */
     }
 
     private void move(int cr, GameObject token, Transform[] otherToken){
@@ -200,14 +285,41 @@ public class Bot : MonoBehaviour
         }
         // canRoll = true; Don't think I need to worry about this
     }
-    int getIndex(Transform target, Transform[] objects){
-        int index = -1;
-        for (int i = 0; i < objects.Length; i++){
-            if (objects[i] == target){
-                index = i;
-                break;
+
+    bool checkWin(Transform[] blueCounters, Transform[] greenCounters){
+        foreach (Transform c in blueCounters){
+            if (c.GetComponent<Counter>().isFinished == false){
+                return false;
             }
         }
-        return index;
+        foreach (Transform c in greenCounters){
+            if (c.GetComponent<Counter>().isFinished == false){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    int whoWon(Transform[] blueCounters, Transform[] greenCounters){
+        bool blueWin = false;
+        bool greenWin = false;
+        foreach (Transform c in blueCounters){
+            if (c.GetComponent<Counter>().isFinished == false){
+                blueWin = false;
+            }
+        }
+        foreach (Transform c in greenCounters){
+            if (c.GetComponent<Counter>().isFinished == false){
+                greenWin = false;
+            }
+        }
+        if (blueWin == true){
+            return 1;
+        }
+        else if (greenWin == true){
+            return -1;
+        }else{
+            return 0;
+        }
     }
 }

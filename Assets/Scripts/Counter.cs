@@ -33,6 +33,9 @@ public class Counter : MonoBehaviour
         else if (isInHome && homeTravelled+roll+1 > 6){
             return false;
         }
+        if (roll < 0){
+            return false;
+        }
         if (roll == 5){
             return true;
         }
