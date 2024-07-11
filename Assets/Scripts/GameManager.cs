@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
     public Transform Checkpoints;
     private List<Transform> checkpointList;
 
-    // private int turn = -1;
+    private Bot bot;
     private int turn = 0;
     public int[] dieRolls = new int[10];
     public bool canRoll = true;
@@ -42,6 +42,7 @@ public class GameManager : MonoBehaviour
         foreach (Transform checkpointSingleTransform in Checkpoints) {
             checkpointList.Add(checkpointSingleTransform);
         }
+        bot = GetComponent<Bot>();
     }
 
     void Start()
@@ -104,6 +105,7 @@ public class GameManager : MonoBehaviour
                 front = "blue";
                 moveToFront(blueCounters, greenCounters);
             }
+            // move(currentRoll, blueCounters[bot.makeMove()].gameObject, greenCounters);
             playerTurn(blueCounters, greenCounters);
         }
     }
