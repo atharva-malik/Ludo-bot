@@ -36,12 +36,11 @@ public class Bot : MonoBehaviour
         
     }
 
-    int[] getRoll(int[] rolls){
-        int len = 0;
-        for (int i = 0; i < 3; i++){
-            Debug.LogError("Roll: " + rolls[i].ToString());
-            len++;
+    int[] getRoll(int[] rolls, int lr){
+        int len = 1;
+        for (int i = 0; i < 6; i++){
             if (rolls[i] != 5){
+                len += i;
                 break;
             }
         }
@@ -51,9 +50,10 @@ public class Bot : MonoBehaviour
         //     }
         // }
         int[] output = new int[len];
-        for (int i = 0; i < 3; i++){
-                output[i] = rolls[i];
-            if (rolls[i] != 5){
+        rolls[0] = 5;
+        for (int i = 1; i < len; i++){
+            output[i] = rolls[i-1];
+            if (rolls[i-1] != 5){
                 break;
             }
         }
@@ -76,7 +76,7 @@ public class Bot : MonoBehaviour
         System.Array.Copy(pCounters, pCountersEdited, pCounters.Length);
         if (isMaximizing){
             float maxEval = -2147483648;
-            int[] rolls = getRoll(gm.dieRolls);
+            int[] rolls = getRoll(gm.dieRolls, gm.lastRoll);
             for (int i = 0; i < bCountersEdited.Length; i++){
                 for (int r = 0; r < 3; r++){
                     if (bCountersEdited[i].GetComponent<Counter>().canMove(r)){
@@ -102,7 +102,7 @@ public class Bot : MonoBehaviour
             return maxEval;
         }else{
             float minEval = 2147483647;
-            int[] rolls = getRoll(gm.dieRolls);
+            int[] rolls = getRoll(gm.dieRolls, gm.lastRoll);
             for (int i = 0; i < bCountersEdited.Length; i++){
                 for (int r = 0; r < 3; r++){
                     if (bCountersEdited[i].GetComponent<Counter>().canMove(r)){
@@ -168,7 +168,7 @@ public class Bot : MonoBehaviour
         return beval - peval;
     }
 
-    public int makeMove(int cr, Transform[] bCounters, Transform[] pCounters, int depth){
+    public int makeMove(Transform[] bCounters, Transform[] pCounters, int depth){
         Debug.LogWarning("Starting Minimax");
         float alpha = -2147483648;
         float beta = 2147483647;
@@ -178,7 +178,7 @@ public class Bot : MonoBehaviour
         System.Array.Copy(pCounters, pCountersEdited, pCounters.Length);
         bool flag = false;
         for (int i = 0; i < 4; i++){
-            if (gm.blueCounters[i].GetComponent<Counter>().canMove(cr) == true){
+            if (gm.blueCounters[i].GetComponent<Counter>().canMove(gm.currentRoll) == true){
                 flag = true;
             }
         }
@@ -186,9 +186,9 @@ public class Bot : MonoBehaviour
             return -1;
         float maxEval = -2147483648;
         int best_move = -1;
-        int[] rolls = getRoll(gm.dieRolls);
+        int[] rolls = getRoll(gm.dieRolls, gm.lastRoll);
         foreach (int i in rolls){
-            Debug.LogError(i);
+            // Debug.LogError(i);
         }
         for (int i = 0; i < bCountersEdited.Length; i++){
             Debug.LogWarning("Cycling through bCounters " + i.ToString());

@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
     public bool canRoll = true;
     private bool canMove = false;
     public int currentRoll = -1;
-    private int lastRoll = -1;
+    public int lastRoll = -1;
     private string front = "";
 
     // Start is called before the first frame update
@@ -115,21 +115,15 @@ public class GameManager : MonoBehaviour
                 front = "blue";
                 moveToFront(blueCounters, greenCounters);
             }
-            int moveNum = bot.makeMove(currentRoll, blueCounters, greenCounters, 1);
+            int moveNum = bot.makeMove(blueCounters, greenCounters, 2);
             Debug.Log(moveNum);
             if (moveNum != -1){
                 // Debug.Log(bot.evaluation());
                 move(currentRoll, blueCounters[moveNum].gameObject, greenCounters);
-                roll();
-                currentRoll = dieRolls[0];
-                if(lastRoll != 5){
-                    switchTurn();
-                    lastRoll = currentRoll;
-                }else{
-                    lastRoll = currentRoll;
-                }
-                canRoll = false;
-                changeRoll();
+                canRoll = true;
+                canMove = false;
+            }else{
+                Debug.LogError(moveNum);
             }
             // playerTurn(blueCounters, greenCounters);
         }
