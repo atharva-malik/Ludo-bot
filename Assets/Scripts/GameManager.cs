@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviour
     private bool canMove = false;
     private int currentRoll = -1;
     private int lastRoll = -1;
+    private string front = "";
 
     // Start is called before the first frame update
 
@@ -86,16 +87,24 @@ public class GameManager : MonoBehaviour
                     changeRoll();
                 }
             }
-            if (turn == 0){ // Player's turn
-                playerTurn(hit, greenCounters);
+        }
+        if (turn == 0){ // Player's turn
+            if (front != "green"){
+                front = "green";
+                moveToFront(greenCounters, blueCounters);
             }
-            else if (turn == 1){ // This will be the bot's turn, but bot is not yet implemented
-                playerTurn(hit, blueCounters);
+            playerTurn(greenCounters);
+        }
+        else if (turn == 1){ // This will be the bot's turn, but bot is not yet implemented
+            if (front != "blue"){
+                front = "blue";
+                moveToFront(blueCounters, greenCounters);
             }
+            playerTurn(blueCounters);
         }
     }
 
-    void playerTurn(RaycastHit2D h, Transform[] counters){
+    void playerTurn(Transform[] counters){
         foreach (Transform c in counters){
             if (c.GetComponent<Counter>().canMove(currentRoll)){
                 canMove = true;
@@ -104,21 +113,31 @@ public class GameManager : MonoBehaviour
         }
         if (canMove == false){
             canRoll = true;
-            // switchTurn();
         }
         else if (canMove == true){
-            foreach (Transform t in counters){
-                if (h.collider.gameObject.transform == t){
-                    if (h.collider.gameObject.GetComponent<Counter>().canMove(currentRoll)){
-                        canMove = false;
-                        move(currentRoll, h.collider.gameObject);
-                        // lastRoll = currentRoll;
-                        canRoll = true;
-                        // if (currentRoll != 5){
-                        //     switchTurn();
-                        // }
-                    }
-                }
+            if (Input.GetKeyDown(KeyCode.Keypad1) && counters[0].GetComponent<Counter>().canMove(currentRoll))
+            {
+                canMove = false;
+                move(currentRoll, counters[0].gameObject);
+                canRoll = true;
+            }
+            else if (Input.GetKeyDown(KeyCode.Keypad2) && counters[1].GetComponent<Counter>().canMove(currentRoll))
+            {
+                canMove = false;
+                move(currentRoll, counters[1].gameObject);
+                canRoll = true;
+            }
+            else if (Input.GetKeyDown(KeyCode.Keypad3) && counters[2].GetComponent<Counter>().canMove(currentRoll))
+            {
+                canMove = false;
+                move(currentRoll, counters[2].gameObject);
+                canRoll = true;
+            }
+            else if (Input.GetKeyDown(KeyCode.Keypad4) && counters[3].GetComponent<Counter>().canMove(currentRoll))
+            {
+                canMove = false;
+                move(currentRoll, counters[3].gameObject);
+                canRoll = true;
             }
         }
     }
@@ -204,6 +223,15 @@ public class GameManager : MonoBehaviour
         }
         else{
             turn--;
+        }
+    }
+
+    void moveToFront(Transform[] counters, Transform[] otherCounters){
+        foreach (Transform c in counters){
+            c.transform.position += new Vector3(0,0,1);
+        }
+        foreach (Transform c in otherCounters){
+            c.transform.position += new Vector3(0,0,-1);
         }
     }
 }

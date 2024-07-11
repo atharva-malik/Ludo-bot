@@ -215,8 +215,8 @@ MonoBehaviour:
   - {fileID: 1130103672}
   - {fileID: 1161867742}
   Checkpoints: {fileID: 617355376}
+  dieRolls: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
   canRoll: 1
-  currentRoll: -1
 --- !u!1 &33564763
 GameObject:
   m_ObjectHideFlags: 0
@@ -698,11 +698,6 @@ MonoBehaviour:
   greenEntryCheckpointNumber: 63
   blueEntryCheckpointNumber: 68
   yellowEntryCheckpointNumber: 53
---- !u!1 &160439906 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4798132636317305588, guid: 37758f6ac8d1f6842b5be1ccaa9148cf, type: 3}
-  m_PrefabInstance: {fileID: 182436691}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &182436691
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -711,13 +706,13 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1102751252}
     m_Modifications:
+    - target: {fileID: 448950636315134843, guid: 37758f6ac8d1f6842b5be1ccaa9148cf, type: 3}
+      propertyPath: m_text
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4798132636317305588, guid: 37758f6ac8d1f6842b5be1ccaa9148cf, type: 3}
       propertyPath: m_Name
       value: Green Counter (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 4798132636317305594, guid: 37758f6ac8d1f6842b5be1ccaa9148cf, type: 3}
-      propertyPath: m_RootOrder
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4798132636317305594, guid: 37758f6ac8d1f6842b5be1ccaa9148cf, type: 3}
       propertyPath: m_LocalPosition.x
@@ -762,36 +757,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4798132636317305588, guid: 37758f6ac8d1f6842b5be1ccaa9148cf, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 182436695}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 37758f6ac8d1f6842b5be1ccaa9148cf, type: 3}
 --- !u!4 &182436692 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4798132636317305594, guid: 37758f6ac8d1f6842b5be1ccaa9148cf, type: 3}
   m_PrefabInstance: {fileID: 182436691}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &182436695
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 160439906}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe2eeca636a182242a3f71c572c2c75b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isOut: 0
-  isInHome: 0
-  homeTravelled: 0
-  homeStart: 37
-  homeOffset: 24
-  currentCheckpoint: 0
-  isFinished: 0
-  startCheckpoint: 39
 --- !u!1 &205326641
 GameObject:
   m_ObjectHideFlags: 0
@@ -928,10 +900,6 @@ PrefabInstance:
       value: Blue Counter
       objectReference: {fileID: 0}
     - target: {fileID: 4798132636317305594, guid: 43e99db9d60cfe5459859b77c773fe34, type: 3}
-      propertyPath: m_RootOrder
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4798132636317305594, guid: 43e99db9d60cfe5459859b77c773fe34, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -974,10 +942,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4798132636317305588, guid: 43e99db9d60cfe5459859b77c773fe34, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 300501262}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 43e99db9d60cfe5459859b77c773fe34, type: 3}
 --- !u!4 &275078758 stripped
 Transform:
@@ -1176,31 +1141,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4798132636317305594, guid: 05703c07fc7b38f42ae8e54b4c9e3fed, type: 3}
   m_PrefabInstance: {fileID: 289846976}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &300501259 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4798132636317305588, guid: 43e99db9d60cfe5459859b77c773fe34, type: 3}
-  m_PrefabInstance: {fileID: 275078757}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &300501262
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 300501259}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe2eeca636a182242a3f71c572c2c75b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isOut: 0
-  isInHome: 0
-  homeTravelled: 0
-  homeStart: 11
-  homeOffset: 55
-  currentCheckpoint: 0
-  isFinished: 0
-  startCheckpoint: 13
 --- !u!1 &321012153
 GameObject:
   m_ObjectHideFlags: 0
@@ -1696,10 +1636,6 @@ PrefabInstance:
       value: Blue Counter (2)
       objectReference: {fileID: 0}
     - target: {fileID: 4798132636317305594, guid: 43e99db9d60cfe5459859b77c773fe34, type: 3}
-      propertyPath: m_RootOrder
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4798132636317305594, guid: 43e99db9d60cfe5459859b77c773fe34, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -1739,13 +1675,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6558369013299763798, guid: 43e99db9d60cfe5459859b77c773fe34, type: 3}
+      propertyPath: m_text
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4798132636317305588, guid: 43e99db9d60cfe5459859b77c773fe34, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1187720327}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 43e99db9d60cfe5459859b77c773fe34, type: 3}
 --- !u!4 &422641562 stripped
 Transform:
@@ -1914,10 +1851,6 @@ PrefabInstance:
       value: Green Counter
       objectReference: {fileID: 0}
     - target: {fileID: 4798132636317305594, guid: 37758f6ac8d1f6842b5be1ccaa9148cf, type: 3}
-      propertyPath: m_RootOrder
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4798132636317305594, guid: 37758f6ac8d1f6842b5be1ccaa9148cf, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -1960,10 +1893,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4798132636317305588, guid: 37758f6ac8d1f6842b5be1ccaa9148cf, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1699083728}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 37758f6ac8d1f6842b5be1ccaa9148cf, type: 3}
 --- !u!4 &440166233 stripped
 Transform:
@@ -2884,13 +2814,13 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1102751252}
     m_Modifications:
+    - target: {fileID: 448950636315134843, guid: 37758f6ac8d1f6842b5be1ccaa9148cf, type: 3}
+      propertyPath: m_text
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4798132636317305588, guid: 37758f6ac8d1f6842b5be1ccaa9148cf, type: 3}
       propertyPath: m_Name
       value: Green Counter (2)
-      objectReference: {fileID: 0}
-    - target: {fileID: 4798132636317305594, guid: 37758f6ac8d1f6842b5be1ccaa9148cf, type: 3}
-      propertyPath: m_RootOrder
-      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4798132636317305594, guid: 37758f6ac8d1f6842b5be1ccaa9148cf, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2935,10 +2865,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4798132636317305588, guid: 37758f6ac8d1f6842b5be1ccaa9148cf, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1796965491}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 37758f6ac8d1f6842b5be1ccaa9148cf, type: 3}
 --- !u!4 &749612287 stripped
 Transform:
@@ -3116,11 +3043,6 @@ MonoBehaviour:
   greenEntryCheckpointNumber: 63
   blueEntryCheckpointNumber: 68
   yellowEntryCheckpointNumber: 53
---- !u!1 &830849191 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4798132636317305588, guid: 43e99db9d60cfe5459859b77c773fe34, type: 3}
-  m_PrefabInstance: {fileID: 1030008387}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &835888624
 GameObject:
   m_ObjectHideFlags: 0
@@ -3870,10 +3792,6 @@ PrefabInstance:
       value: Blue Counter (3)
       objectReference: {fileID: 0}
     - target: {fileID: 4798132636317305594, guid: 43e99db9d60cfe5459859b77c773fe34, type: 3}
-      propertyPath: m_RootOrder
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 4798132636317305594, guid: 43e99db9d60cfe5459859b77c773fe34, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -3913,39 +3831,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6558369013299763798, guid: 43e99db9d60cfe5459859b77c773fe34, type: 3}
+      propertyPath: m_text
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4798132636317305588, guid: 43e99db9d60cfe5459859b77c773fe34, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1030008391}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 43e99db9d60cfe5459859b77c773fe34, type: 3}
 --- !u!4 &1030008388 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4798132636317305594, guid: 43e99db9d60cfe5459859b77c773fe34, type: 3}
   m_PrefabInstance: {fileID: 1030008387}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1030008391
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 830849191}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe2eeca636a182242a3f71c572c2c75b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isOut: 0
-  isInHome: 0
-  homeTravelled: 0
-  homeStart: 11
-  homeOffset: 55
-  currentCheckpoint: 0
-  isFinished: 0
-  startCheckpoint: 13
 --- !u!1 &1076730522
 GameObject:
   m_ObjectHideFlags: 0
@@ -5036,31 +4935,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 3.3, y: 3.22}
   m_EdgeRadius: 0
---- !u!1 &1187720324 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4798132636317305588, guid: 43e99db9d60cfe5459859b77c773fe34, type: 3}
-  m_PrefabInstance: {fileID: 422641561}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1187720327
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1187720324}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe2eeca636a182242a3f71c572c2c75b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isOut: 0
-  isInHome: 0
-  homeTravelled: 0
-  homeStart: 11
-  homeOffset: 55
-  currentCheckpoint: 0
-  isFinished: 0
-  startCheckpoint: 13
 --- !u!1 &1214145174
 GameObject:
   m_ObjectHideFlags: 0
@@ -5497,11 +5371,6 @@ MonoBehaviour:
   greenEntryCheckpointNumber: 63
   blueEntryCheckpointNumber: 68
   yellowEntryCheckpointNumber: 53
---- !u!1 &1316039544 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4798132636317305588, guid: 37758f6ac8d1f6842b5be1ccaa9148cf, type: 3}
-  m_PrefabInstance: {fileID: 1736040946}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1318799988
 GameObject:
   m_ObjectHideFlags: 0
@@ -5647,11 +5516,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 428102991}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1349351721 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4798132636317305588, guid: 43e99db9d60cfe5459859b77c773fe34, type: 3}
-  m_PrefabInstance: {fileID: 1713945592}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1359815529
 GameObject:
   m_ObjectHideFlags: 0
@@ -6671,31 +6535,6 @@ MonoBehaviour:
   greenEntryCheckpointNumber: 63
   blueEntryCheckpointNumber: 68
   yellowEntryCheckpointNumber: 53
---- !u!1 &1699083725 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4798132636317305588, guid: 37758f6ac8d1f6842b5be1ccaa9148cf, type: 3}
-  m_PrefabInstance: {fileID: 440166232}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1699083728
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1699083725}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe2eeca636a182242a3f71c572c2c75b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isOut: 0
-  isInHome: 0
-  homeTravelled: 0
-  homeStart: 37
-  homeOffset: 24
-  currentCheckpoint: 0
-  isFinished: 0
-  startCheckpoint: 39
 --- !u!1 &1701961152
 GameObject:
   m_ObjectHideFlags: 0
@@ -6766,10 +6605,6 @@ PrefabInstance:
       value: Blue Counter (1)
       objectReference: {fileID: 0}
     - target: {fileID: 4798132636317305594, guid: 43e99db9d60cfe5459859b77c773fe34, type: 3}
-      propertyPath: m_RootOrder
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4798132636317305594, guid: 43e99db9d60cfe5459859b77c773fe34, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -6809,39 +6644,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6558369013299763798, guid: 43e99db9d60cfe5459859b77c773fe34, type: 3}
+      propertyPath: m_text
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4798132636317305588, guid: 43e99db9d60cfe5459859b77c773fe34, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1713945596}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 43e99db9d60cfe5459859b77c773fe34, type: 3}
 --- !u!4 &1713945593 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4798132636317305594, guid: 43e99db9d60cfe5459859b77c773fe34, type: 3}
   m_PrefabInstance: {fileID: 1713945592}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1713945596
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1349351721}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe2eeca636a182242a3f71c572c2c75b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isOut: 0
-  isInHome: 0
-  homeTravelled: 0
-  homeStart: 11
-  homeOffset: 55
-  currentCheckpoint: 0
-  isFinished: 0
-  startCheckpoint: 13
 --- !u!1 &1717406206
 GameObject:
   m_ObjectHideFlags: 0
@@ -6964,13 +6780,13 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1102751252}
     m_Modifications:
+    - target: {fileID: 448950636315134843, guid: 37758f6ac8d1f6842b5be1ccaa9148cf, type: 3}
+      propertyPath: m_text
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 4798132636317305588, guid: 37758f6ac8d1f6842b5be1ccaa9148cf, type: 3}
       propertyPath: m_Name
       value: Green Counter (3)
-      objectReference: {fileID: 0}
-    - target: {fileID: 4798132636317305594, guid: 37758f6ac8d1f6842b5be1ccaa9148cf, type: 3}
-      propertyPath: m_RootOrder
-      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4798132636317305594, guid: 37758f6ac8d1f6842b5be1ccaa9148cf, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7015,36 +6831,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4798132636317305588, guid: 37758f6ac8d1f6842b5be1ccaa9148cf, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1736040950}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 37758f6ac8d1f6842b5be1ccaa9148cf, type: 3}
 --- !u!4 &1736040947 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4798132636317305594, guid: 37758f6ac8d1f6842b5be1ccaa9148cf, type: 3}
   m_PrefabInstance: {fileID: 1736040946}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1736040950
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1316039544}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe2eeca636a182242a3f71c572c2c75b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isOut: 0
-  isInHome: 0
-  homeTravelled: 0
-  homeStart: 37
-  homeOffset: 24
-  currentCheckpoint: 0
-  isFinished: 0
-  startCheckpoint: 39
 --- !u!1 &1762380521
 GameObject:
   m_ObjectHideFlags: 0
@@ -7232,31 +7025,6 @@ MonoBehaviour:
   greenEntryCheckpointNumber: 63
   blueEntryCheckpointNumber: 68
   yellowEntryCheckpointNumber: 53
---- !u!1 &1796965488 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4798132636317305588, guid: 37758f6ac8d1f6842b5be1ccaa9148cf, type: 3}
-  m_PrefabInstance: {fileID: 749612286}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1796965491
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1796965488}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe2eeca636a182242a3f71c572c2c75b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isOut: 0
-  isInHome: 0
-  homeTravelled: 0
-  homeStart: 37
-  homeOffset: 24
-  currentCheckpoint: 0
-  isFinished: 0
-  startCheckpoint: 39
 --- !u!1 &1825886369
 GameObject:
   m_ObjectHideFlags: 0
