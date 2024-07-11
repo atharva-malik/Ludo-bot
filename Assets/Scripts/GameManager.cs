@@ -68,6 +68,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.Log(canMove);
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -93,20 +94,22 @@ public class GameManager : MonoBehaviour
                 front = "green";
                 moveToFront(greenCounters, blueCounters);
             }
-            playerTurn(greenCounters);
+            playerTurn(greenCounters, blueCounters);
         }
         else if (turn == 1){ // This will be the bot's turn, but bot is not yet implemented
             if (front != "blue"){
                 front = "blue";
                 moveToFront(blueCounters, greenCounters);
             }
-            playerTurn(blueCounters);
+            playerTurn(blueCounters, greenCounters);
         }
     }
 
-    void playerTurn(Transform[] counters){
+    void playerTurn(Transform[] counters, Transform[] otherCounters){
         foreach (Transform c in counters){
             if (c.GetComponent<Counter>().canMove(currentRoll)){
+                // Debug.Log("Counter can move!");
+                // Debug.Log(c.transform.name);
                 canMove = true;
                 break;
             }
@@ -117,32 +120,34 @@ public class GameManager : MonoBehaviour
         else if (canMove == true){
             if (Input.GetKeyDown(KeyCode.Keypad1) && counters[0].GetComponent<Counter>().canMove(currentRoll))
             {
+                move(currentRoll, counters[0].gameObject, otherCounters);
                 canMove = false;
-                move(currentRoll, counters[0].gameObject);
                 canRoll = true;
             }
             else if (Input.GetKeyDown(KeyCode.Keypad2) && counters[1].GetComponent<Counter>().canMove(currentRoll))
             {
+                move(currentRoll, counters[1].gameObject, otherCounters);
                 canMove = false;
-                move(currentRoll, counters[1].gameObject);
                 canRoll = true;
             }
             else if (Input.GetKeyDown(KeyCode.Keypad3) && counters[2].GetComponent<Counter>().canMove(currentRoll))
             {
+                move(currentRoll, counters[2].gameObject, otherCounters);
                 canMove = false;
-                move(currentRoll, counters[2].gameObject);
                 canRoll = true;
             }
             else if (Input.GetKeyDown(KeyCode.Keypad4) && counters[3].GetComponent<Counter>().canMove(currentRoll))
             {
+                move(currentRoll, counters[3].gameObject, otherCounters);
                 canMove = false;
-                move(currentRoll, counters[3].gameObject);
                 canRoll = true;
             }
         }
+        canMove = false;
     }
 
-    void move(int cr, GameObject token){
+    void move(int cr, GameObject token, Transform[] otherToken){
+        checkCaptures(token.transform, otherToken);
         currentRoll = -1;
         // changeRoll();
         Counter counter = token.GetComponent<Counter>();
@@ -226,7 +231,16 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void moveToFront(Transform[] counters, Transform[] otherCounters){
+    void checkCaptures(Transform myCounter, Transform[] otherCounters){
+        foreach (Transform c in otherCounters){
+            if (c.GetComponent<Counter>().currentCheckpoint == myCounter.GetComponent<Counter>().currentCheckpoint && c.GetComponent<Counter>().isOut == true){
+                Debug.Log("Capture!");
+                // c.GetComponent<Counter>().isFinished = true;
+            }
+        }
+    }
+
+    void moveToFront(Transform[] counters, Transform[] otherCounters, int cRoll){
         foreach (Transform c in counters){
             c.transform.position += new Vector3(0,0,1);
         }

@@ -9,7 +9,7 @@ public class Counter : MonoBehaviour
     public int homeTravelled = 0;
     public int homeStart = 0;
     public int homeOffset = 0;
-    public int currentCheckpoint = 0;
+    public int currentCheckpoint = -1;
     public bool isFinished = false;
     public int startCheckpoint;
 
