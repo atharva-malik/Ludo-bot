@@ -106,7 +106,17 @@ public class Bot : MonoBehaviour
         return output;
     }
 
-    public float evaluation(Transform[] bCounters, Transform[] pCounters){
+    private float evaluation(Transform[] bCounters, Transform[] pCounters){
+        /*
+        Then, for evaluation, I will use the following factors(on a scale of 1-10):
+            1. Number of 'active' pieces: 7
+            2. Number of 'safe' pieces: 2
+            3. Number of 'threatened' pieces: 8 #TODO: Add this here
+            4. Number of pieces in 'home stretch': 10
+            5. Number of 'finished' pieces: 6
+            6. Capture the enemy's pieces: 9 This was implemented in a roundabout way, becuz enemy piece will be in home if captured.
+            7. Pieces who have travelled more have a higher value.
+        */
         if (whoWon(bCounters, pCounters) != 0){
             if (whoWon(bCounters, pCounters) == 1){
                 return 2147483647;
@@ -116,133 +126,73 @@ public class Bot : MonoBehaviour
         }
         // The bot side
         int beval = 0;
+        int numOfCaptures = 0;
         foreach (Transform c in bCounters){
             if (c.GetComponent<Counter>().isOut == true && c.GetComponent<Counter>().isInHome == false){
-                beval += 7;
+                beval += 7*c.GetComponent<Counter>().travelled;
+                int cc = c.GetComponent<Counter>().currentCheckpoint;
+                if (gm.checkpointList[cc].GetComponent<Checkpoints>().isSafe == true){
+                    beval += 2;
+                }
             }
             else if (c.GetComponent<Counter>().isOut == true && c.GetComponent<Counter>().isInHome == true && c.GetComponent<Counter>().isFinished == false){
-                beval += 17;
+                beval += 7*(c.GetComponent<Counter>().travelled - c.GetComponent<Counter>().homeTravelled);
+                beval += 10;
             }
             else if (c.GetComponent<Counter>().isFinished == true){
                 beval += 13;
             }
         }
+        for (int i = 0; i < 6; i++){
+            numOfCaptures += checkCaptures(bCounters, pCounters, i);
+        }
+        beval -= numOfCaptures*9;
 
         // The player side
         int peval = 0;
+        numOfCaptures = 0;
         foreach (Transform c in pCounters){
             if (c.GetComponent<Counter>().isOut == true && c.GetComponent<Counter>().isInHome == false){
-                peval += 7;
+                beval += 7*c.GetComponent<Counter>().travelled;
             }
             else if (c.GetComponent<Counter>().isOut == true && c.GetComponent<Counter>().isInHome == true && c.GetComponent<Counter>().isFinished == false){
-                peval += 17;
+                beval += 7*(c.GetComponent<Counter>().travelled - c.GetComponent<Counter>().homeTravelled);
+                beval += 10;
             }
             else if (c.GetComponent<Counter>().isFinished == true){
                 peval += 13;
             }
         }
-        
+        for (int i = 0; i < 6; i++){
+            numOfCaptures += checkCaptures(pCounters, bCounters, i);
+        }
+        peval -= numOfCaptures*9;
+
         return beval - peval;
     }
 
     public int makeMove(){
+        UndoMove();
         Transform[] bCountersEdited = blueShadowCounters.ToArray();
         Transform[] pCountersEdited = greenShadowCounters.ToArray();
-        // System.Array.Copy(bCounters, bCountersEdited, bCounters.Length); // Create a deepcopy to avoid the risk of accidentally changing the original game board
-        // System.Array.Copy(pCounters, pCountersEdited, pCounters.Length);
-        // for (int i = 0; i < 4; i++){
-        //     if (bCountersEdited[i].GetComponent<Counter>().canMove(gm.currentRoll) == true){
-        //         return i;
-        //     }
-        // }
         float maxEval = -2147483648;
         int best_move = -1;
         int[] rolls = getRoll(gm.dieRolls, gm.currentRoll);
         for (int i = 0; i < bCountersEdited.Length; i++){
-            // Debug.LogWarning("Cycling through bCounters " + i.ToString());
             for (int r = 0; r < rolls.Length; r++){
-                // Debug.LogWarning("Cycling through rolls " + r.ToString());
                 if (bCountersEdited[i].GetComponent<Counter>().canMove(rolls[r])){
-                    // Debug.LogWarning("Finding what can move" + rolls[r].ToString());
                     move(rolls[r], bCountersEdited[i].gameObject, pCountersEdited);
                     float eval = evaluation(bCountersEdited, pCountersEdited); // TODO: Implement evaluation
-                    // Debug.Log("Eval for " + i.ToString() + eval.ToString());
                     if (eval > maxEval){
-                        // Debug.LogWarning("Move FOUND!" + i.ToString());
                         maxEval = eval;
                         best_move = i;
                     }
-                    bCountersEdited = bCounters.ToArray();
-                    pCountersEdited = pCounters.ToArray();
+                    UndoMove();
                 }
             }
-            // System.Array.Copy(bCounters, bCountersEdited, bCounters.Length);
-            // System.Array.Copy(pCounters, pCountersEdited, pCounters.Length);
         }
-        // Debug.Log(best_move);
         return best_move;
     }
-
-    // public int makeMove(Transform[] bCounters, Transform[] pCounters, int depth){
-    //     // Debug.LogWarning("Starting Minimax");
-    //     float alpha = -2147483648;
-    //     float beta = 2147483647;
-    //     Transform[] bCountersEdited = new Transform[bCounters.Length];
-    //     Transform[] pCountersEdited = new Transform[pCounters.Length];
-    //     System.Array.Copy(bCounters, bCountersEdited, bCounters.Length);
-    //     System.Array.Copy(pCounters, pCountersEdited, pCounters.Length);
-    //     bool flag = false;
-    //     for (int i = 0; i < 4; i++){
-    //         if (gm.blueCounters[i].GetComponent<Counter>().canMove(gm.currentRoll) == true){
-    //             flag = true;
-    //         }
-    //     }
-    //     if (flag == false){
-    //         return -1;
-    //     }
-    //     Debug.LogWarning("Starting minimax");
-    //     float maxEval = -2147483648;
-    //     int best_move = -1;
-    //     int[] rolls = getRoll(gm.dieRolls, gm.lastRoll);
-    //     for (int i = 0; i<rolls.Length; i++){
-    //         Debug.Log("Roll: " + i.ToString() + " " + rolls[i].ToString());
-    //     }
-    //     for (int i = 0; i < bCountersEdited.Length; i++){
-    //         Debug.LogWarning("Cycling through bCounters " + i.ToString());
-    //         for (int r = 0; r < 3; r++){
-    //             Debug.LogWarning("Cycling through rolls " + r.ToString());
-    //             if (bCountersEdited[i].GetComponent<Counter>().canMove(r)){
-    //                 // Debug.LogWarning("Finding what can move" + rolls[r].ToString());
-    //                 move(rolls[r], bCountersEdited[i].gameObject, pCountersEdited);
-    //                 float eval = minimax(bCountersEdited, pCountersEdited, depth - 1, alpha, beta, false);
-    //                 Debug.Log("Eval for " + i.ToString() + eval.ToString());
-    //                 if (eval > maxEval){
-    //                     // Debug.LogWarning("Move FOUND!" + i.ToString());
-    //                     maxEval = eval;
-    //                     best_move = i;
-    //                 }
-    //             }
-    //         }
-    //         // System.Array.Copy(bCounters, bCountersEdited, bCounters.Length);
-    //         // System.Array.Copy(pCounters, pCountersEdited, pCounters.Length);
-    //     }
-    //     // Debug.Log(best_move);
-    //     return best_move;
-    //     /*
-    //     def find_best_move():
-    //         best_eval = float('-inf')
-    //         best_move = -1
-    //         for i in range(9):
-    //             if board[i] == ' ':
-    //                 make_move(i, 'O')
-    //                 evaluation = minimax(0, False)
-    //                 undo_move(i)
-    //                 if evaluation > best_eval:
-    //                     best_eval = evaluation
-    //                     best_move = i
-    //         return best_move
-    //     */
-    // }
 
     private void move(int cr, GameObject token, Transform[] otherToken){
         doCaptures(token.transform, otherToken, cr);
@@ -302,6 +252,38 @@ public class Bot : MonoBehaviour
             }
         }
         // canRoll = true; Don't think I need to worry about this
+    }
+
+    int checkCaptures(Transform[] bCounters, Transform[] otherCounters, int cRoll){
+        // Counter counter = myCounter.GetComponent<Counter>();
+        // int cp = counter.currentCheckpoint;
+        // if (counter.currentCheckpoint+cRoll+1 > 51 && counter.isInHome == false){
+        //     cp += cRoll-51;
+        // }else{
+        //     cp += cRoll+1;
+        // }
+        // foreach (Transform c in otherCounters){
+        //     if (c.GetComponent<Counter>().currentCheckpoint == cp && c.GetComponent<Counter>().isOut == true && gm.checkpointList[cp].GetComponent<Checkpoints>().isSafe == false){
+        //         c.GetComponent<Counter>().isOut = false;
+        //         c.GetComponent<Counter>().currentCheckpoint = -1;
+        //     }
+        // }
+        int numOfCaptures = 0;
+        foreach (Transform i in bCounters){
+            Counter counter = i.GetComponent<Counter>();
+            int cp = counter.currentCheckpoint;
+            if (counter.currentCheckpoint+cRoll+1 > 51 && counter.isInHome == false){
+                cp += cRoll-51;
+            }else{
+                cp += cRoll+1;
+            }
+            foreach (Transform c in otherCounters){    
+                if (c.GetComponent<Counter>().currentCheckpoint == cRoll+1 && c.GetComponent<Counter>().isOut == true && gm.checkpointList[cRoll+1].GetComponent<Checkpoints>().isSafe == false){
+                    numOfCaptures += 1;
+                }
+            }
+        }
+        return numOfCaptures;
     }
 
     bool checkWin(Transform[] blueCounters, Transform[] greenCounters){

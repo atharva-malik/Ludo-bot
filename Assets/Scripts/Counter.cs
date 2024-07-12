@@ -12,6 +12,7 @@ public class Counter : MonoBehaviour
     public int currentCheckpoint = -1;
     public bool isFinished = false;
     public int startCheckpoint;
+    public int travelled = 0;
 
 
     // Start is called before the first frame update

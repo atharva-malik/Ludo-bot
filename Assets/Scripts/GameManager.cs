@@ -117,18 +117,7 @@ public class GameManager : MonoBehaviour
                 moveToFront(blueCounters, greenCounters);
             }
             if (canMove == true){
-                foreach (Transform c in blueCounters){
-                    Debug.Log("Counter " + c.name + ": canMove: " + c.GetComponent<Counter>().canMove(currentRoll).ToString() + 
-                    " isOut: " + c.GetComponent<Counter>().isOut.ToString() + " currentCheckpoint: " + c.GetComponent<Counter>().currentCheckpoint.ToString());
-                }
-                Transform[] tempMoves = blueCounters.ToArray();
-                int moveNum = bot.makeMove(blueCounters.ToArray(), greenCounters.ToArray());
-                blueCounters = tempMoves;
-                    Debug.LogWarning("Counters have moved!");
-                    foreach (Transform c in blueCounters){
-                        Debug.Log("Counter " + c.name + ": canMove: " + c.GetComponent<Counter>().canMove(currentRoll).ToString() + 
-                        " isOut: " + c.GetComponent<Counter>().isOut.ToString() + " currentCheckpoint: " + c.GetComponent<Counter>().currentCheckpoint.ToString());
-                    }
+                int moveNum = bot.makeMove();
                 if (moveNum != -1){
                     // Debug.Log("Moving " + moveNum.ToString() + " " + currentRoll.ToString() + " spaces");
                     move(currentRoll, blueCounters[moveNum].gameObject, greenCounters);
@@ -192,12 +181,14 @@ public class GameManager : MonoBehaviour
         if (counter.currentCheckpoint+cr+1 > 51 && counter.isInHome == false){
             // counter.currentCheckpoint = counter.currentCheckpoint += cr-51;
             counter.currentCheckpoint += cr-51;
+            counter.travelled += cr+1;
             token.transform.position = checkpointList[counter.currentCheckpoint].position;
             return;
         }
         if (counter.currentCheckpoint+cr+1 > counter.homeStart && counter.isInHome != true && counter.currentCheckpoint < counter.startCheckpoint){
             counter.currentCheckpoint += cr+counter.homeOffset+1;
             counter.homeTravelled = counter.currentCheckpoint-counter.homeStart-counter.homeOffset;
+            counter.travelled += cr+1;
             token.transform.position = checkpointList[counter.currentCheckpoint].position;
             counter.isInHome = true;
             if(counter.homeTravelled >= 6){
@@ -216,6 +207,7 @@ public class GameManager : MonoBehaviour
                 }
                 counter.currentCheckpoint += cr+1;
                 counter.homeTravelled += cr+1;
+                counter.travelled += cr+1;
                 token.transform.position = checkpointList[counter.currentCheckpoint].position;
                 return;
             }
@@ -224,6 +216,7 @@ public class GameManager : MonoBehaviour
             }
         }
         counter.currentCheckpoint += cr+1;
+        counter.travelled += cr+1;
         token.transform.position = checkpointList[counter.currentCheckpoint].position;
     }
 
@@ -299,25 +292,33 @@ public class GameManager : MonoBehaviour
     }
 
     bool checkWin(){
+        int flag = 0;
         foreach (Transform c in blueCounters){
-            if (c.GetComponent<Counter>().isFinished == false){
-                return false;
+            if (c.GetComponent<Counter>().isFinished == true){
+                flag += 1;
             }
         }
+        if (flag == 4){
+            return true;
+        }
+        flag = 0;
         foreach (Transform c in greenCounters){
-            if (c.GetComponent<Counter>().isFinished == false){
-                return false;
+            if (c.GetComponent<Counter>().isFinished == true){
+                flag += 1;
             }
         }
-        return true;
+        if (flag == 4){
+            return true;
+        }
+        return false;
     }
 
     void moveToFront(Transform[] counters, Transform[] otherCounters){
         foreach (Transform c in counters){
-            c.transform.position += new Vector3(0,0,1);
+            c.transform.position += new Vector3(0,0,-1);
         }
         foreach (Transform c in otherCounters){
-            c.transform.position += new Vector3(0,0,-1);
+            c.transform.position += new Vector3(0,0,1);
         }
     }
 }
