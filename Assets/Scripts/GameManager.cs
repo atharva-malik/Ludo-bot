@@ -115,14 +115,15 @@ public class GameManager : MonoBehaviour
                 front = "blue";
                 moveToFront(blueCounters, greenCounters);
             }
-            int moveNum = bot.makeMove(blueCounters, greenCounters, 2);
-            if (moveNum != -1){
+            if (canMove == true){
+                int moveNum = bot.makeMove(blueCounters, greenCounters);
                 // Debug.Log(bot.evaluation());
-                move(currentRoll, blueCounters[moveNum].gameObject, greenCounters);
-                canRoll = true;
-                canMove = false;
-            }else{
-                Debug.LogError(moveNum);
+                if (moveNum != -1){
+                    Debug.Log("Moving " + moveNum.ToString() + " " + currentRoll.ToString() + " spaces");
+                    move(currentRoll, blueCounters[moveNum].gameObject, greenCounters);
+                    canRoll = true;
+                    canMove = false;
+                }
             }
             // playerTurn(blueCounters, greenCounters);
         }
