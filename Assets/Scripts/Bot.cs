@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
@@ -22,6 +23,8 @@ public class Bot : MonoBehaviour
         
         NEW PLAN: I reread the rules of the game and what I had originally planned would not be legal. RESTART
     */
+    public Transform[] blueShadowCounters;
+    public Transform[] greenShadowCounters;
     private GameManager gm;
     // Start is called before the first frame update
     void Start()
@@ -33,6 +36,44 @@ public class Bot : MonoBehaviour
     void Update()
     {
         
+    }
+
+    private void UndoMove(){
+        Transform[] bc = gm.blueCounters;
+        for (int i = 0; i < 4; i++){
+            Counter myC = blueShadowCounters[i].GetComponent<Counter>();
+            Counter C = bc[i].GetComponent<Counter>();
+            myC.isOut = C.isOut;
+            myC.isInHome = C.isInHome;
+            myC.homeTravelled = C.homeTravelled;
+            myC.homeStart = C.homeStart;
+            myC.homeOffset = C.homeOffset;
+            myC.currentCheckpoint = C.currentCheckpoint;
+            myC.isFinished = C.isFinished;
+        }
+        bc = gm.greenCounters;
+        for (int i = 0; i < 4; i++){
+            Counter myC = greenShadowCounters[i].GetComponent<Counter>();
+            Counter C = bc[i].GetComponent<Counter>();
+            myC.isOut = C.isOut;
+            myC.isInHome = C.isInHome;
+            myC.homeTravelled = C.homeTravelled;
+            myC.homeStart = C.homeStart;
+            myC.homeOffset = C.homeOffset;
+            myC.currentCheckpoint = C.currentCheckpoint;
+            myC.isFinished = C.isFinished;
+        }
+    }
+
+    private Transform[] CreateDeepCopy(Transform[] original){
+        Transform[] deepCopy = new Transform[original.Length];
+        for (int i = 0; i < original.Length; i++)
+        {
+            GameObject newObject = new GameObject(original[i].name);
+            newObject = original[i].gameObject;
+            deepCopy[i] = newObject.transform;
+        }
+        return deepCopy;
     }
 
     int getLen(int[] rolls, int lr){
@@ -104,11 +145,11 @@ public class Bot : MonoBehaviour
         return beval - peval;
     }
 
-    public int makeMove(Transform[] bCounters, Transform[] pCounters){
-        Transform[] bCountersEdited = new Transform[bCounters.Length];
-        Transform[] pCountersEdited = new Transform[pCounters.Length];
-        System.Array.Copy(bCounters, bCountersEdited, bCounters.Length); // Create a deepcopy to avoid the risk of accidentally changing the original game board
-        System.Array.Copy(pCounters, pCountersEdited, pCounters.Length);
+    public int makeMove(){
+        Transform[] bCountersEdited = blueShadowCounters.ToArray();
+        Transform[] pCountersEdited = greenShadowCounters.ToArray();
+        // System.Array.Copy(bCounters, bCountersEdited, bCounters.Length); // Create a deepcopy to avoid the risk of accidentally changing the original game board
+        // System.Array.Copy(pCounters, pCountersEdited, pCounters.Length);
         // for (int i = 0; i < 4; i++){
         //     if (bCountersEdited[i].GetComponent<Counter>().canMove(gm.currentRoll) == true){
         //         return i;
@@ -131,8 +172,8 @@ public class Bot : MonoBehaviour
                         maxEval = eval;
                         best_move = i;
                     }
-                    System.Array.Copy(bCounters, bCountersEdited, bCounters.Length); // Create a deepcopy to avoid the risk of accidentally changing the original game board
-                    System.Array.Copy(pCounters, pCountersEdited, pCounters.Length);
+                    bCountersEdited = bCounters.ToArray();
+                    pCountersEdited = pCounters.ToArray();
                 }
             }
             // System.Array.Copy(bCounters, bCountersEdited, bCounters.Length);

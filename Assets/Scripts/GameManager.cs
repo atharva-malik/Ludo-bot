@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using UnityEditor;
 using UnityEngine;
@@ -116,10 +117,20 @@ public class GameManager : MonoBehaviour
                 moveToFront(blueCounters, greenCounters);
             }
             if (canMove == true){
-                int moveNum = bot.makeMove(blueCounters, greenCounters);
-                // Debug.Log(bot.evaluation());
+                foreach (Transform c in blueCounters){
+                    Debug.Log("Counter " + c.name + ": canMove: " + c.GetComponent<Counter>().canMove(currentRoll).ToString() + 
+                    " isOut: " + c.GetComponent<Counter>().isOut.ToString() + " currentCheckpoint: " + c.GetComponent<Counter>().currentCheckpoint.ToString());
+                }
+                Transform[] tempMoves = blueCounters.ToArray();
+                int moveNum = bot.makeMove(blueCounters.ToArray(), greenCounters.ToArray());
+                blueCounters = tempMoves;
+                    Debug.LogWarning("Counters have moved!");
+                    foreach (Transform c in blueCounters){
+                        Debug.Log("Counter " + c.name + ": canMove: " + c.GetComponent<Counter>().canMove(currentRoll).ToString() + 
+                        " isOut: " + c.GetComponent<Counter>().isOut.ToString() + " currentCheckpoint: " + c.GetComponent<Counter>().currentCheckpoint.ToString());
+                    }
                 if (moveNum != -1){
-                    Debug.Log("Moving " + moveNum.ToString() + " " + currentRoll.ToString() + " spaces");
+                    // Debug.Log("Moving " + moveNum.ToString() + " " + currentRoll.ToString() + " spaces");
                     move(currentRoll, blueCounters[moveNum].gameObject, greenCounters);
                     canRoll = true;
                     canMove = false;
