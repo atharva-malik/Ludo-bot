@@ -1,5 +1,7 @@
 # LudBot
-![image](https://github.com/user-attachments/assets/b51be15b-9b4b-4933-889e-c674d45e9452)
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/b51be15b-9b4b-4933-889e-c674d45e9452" />
+</p>
 
 
 LudBot is the world's first open-source bot for the game of Ludo! It is fully functional and ready to be deployed with a sample scene included.
